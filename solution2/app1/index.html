@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React App as Web Component</title>
+
+    <!-- Import Maps for shared dependencies -->
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@18.2.0",
+          "react-dom": "https://esm.sh/react-dom@18.2.0",
+          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+          "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime"
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .demo-section {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .code-block {
+        background-color: #f8f8f8;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 15px;
+        margin: 15px 0;
+        font-family: monospace;
+        white-space: pre-wrap;
+        overflow-x: auto;
+      }
+
+      .note {
+        background-color: #fffde7;
+        border-left: 4px solid #ffd600;
+        padding: 10px 15px;
+        margin: 15px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="demo-section">
+        <h1>Web Component Demo</h1>
+        <p>
+          This React app is mounted as a web component. You can use it in any
+          HTML page with the following tag:
+        </p>
+
+        <div class="code-block">&lt;react-app&gt;&lt;/react-app&gt;</div>
+
+        <div class="note">
+          <strong>Note:</strong> To use this component in other applications,
+          you need to:
+          <ol>
+            <li>
+              Include the built JavaScript bundle from the dist folder using:<br />
+              <code
+                >&lt;script type="module"
+                src="path/to/app1/dist/assets/index.js"&gt;&lt;/script&gt;</code
+              >
+            </li>
+            <li>
+              Add import maps for React dependencies (see head section of this
+              HTML)
+            </li>
+            <li>Use the &lt;react-app&gt; tag in your HTML</li>
+          </ol>
+          <p>
+            The bundle has a static filename (without hash) for consistent
+            importing and excludes React libraries to reduce bundle size and
+            allow sharing.
+          </p>
+        </div>
+
+        <h2>Live Demo:</h2>
+
+        <!-- Using the React app as a web component -->
+        <react-app></react-app>
+      </div>
+
+      <div class="demo-section">
+        <h2>Using as a Standard React App</h2>
+        <p>
+          This application can also be used as a standard React app by
+          uncommenting the React mounting code in main.jsx and adding a root div
+          to your HTML:
+        </p>
+
+        <div class="code-block">&lt;div id="root"&gt;&lt;/div&gt;</div>
+
+        <p>See the README.md and main.jsx comments for more details.</p>
+      </div>
+
+      <div class="demo-section">
+        <h2>Import Maps & External Dependencies</h2>
+        <p>
+          This web component uses import maps to load React and ReactDOM from a
+          CDN rather than bundling them:
+        </p>
+
+        <div class="code-block">
+          &lt;script type="importmap"&gt; { "imports": { "react":
+          "https://esm.sh/react@18.2.0", "react-dom":
+          "https://esm.sh/react-dom@18.2.0", "react-dom/client":
+          "https://esm.sh/react-dom@18.2.0/client", "react/jsx-runtime":
+          "https://esm.sh/react@18.2.0/jsx-runtime" } } &lt;/script&gt;
+        </div>
+
+        <p>This provides several benefits:</p>
+        <ul>
+          <li>Smaller bundle size as React is not included</li>
+          <li>Multiple micro-frontends can share the same React instance</li>
+          <li>Consistent React version across components</li>
+          <li>Better caching as dependencies are loaded from CDN</li>
+        </ul>
+      </div>
+    </div>
+
+    <script type="module" src="/src/index"></script>
+  </body>
+</html>

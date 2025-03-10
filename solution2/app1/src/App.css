@@ -1,0 +1,165 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.dashboard-container {
+  width: 100%;
+  background-color: hotpink !important;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.dashboard-widget {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: left;
+  transition: transform 0.2s;
+}
+
+.dashboard-widget:hover {
+  transform: translateY(-4px);
+}
+
+.dashboard-widget h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.card {
+  padding: 1.5rem 0;
+}
+
+.chart-placeholder {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 150px;
+  margin-top: 1rem;
+}
+
+.chart-bar {
+  width: 18%;
+  background: linear-gradient(to top, #646cff, #9089fc);
+  border-radius: 4px 4px 0 0;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.activity-list li:last-child {
+  border-bottom: none;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: #646cff;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+body {
+  background-color: crimson !important;
+}
+
+/* CSS LEAK: These styles will leak into the shell and other micro frontends */
+h1,
+h2,
+h3 {
+  color: lime !important;
+  font-family: "Comic Sans MS", cursive !important;
+  text-shadow: 2px 2px 4px purple !important;
+}
+
+/* This will affect all buttons in the application */
+button {
+  border: 3px dashed yellow !important;
+  background-color: black !important;
+  color: white !important;
+}
+
+/* This will affect common container elements */
+.container,
+.widget,
+.card,
+.panel {
+  border: 5px solid orange !important;
+  box-shadow: 0 0 15px blue !important;
+}
+
+/* This targets a very generic class that might be used elsewhere */
+.content {
+  background-color: fuchsia !important;
+  padding: 20px !important;
+}
+
+/* This affects all list items */
+li {
+  margin: 10px 0 !important;
+  padding: 5px !important;
+  background-color: aquamarine !important;
+  border-radius: 10px !important;
+}
