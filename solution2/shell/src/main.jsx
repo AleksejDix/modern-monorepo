@@ -3,13 +3,11 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
-console.log('Starting shell application...');
 
 // In development mode, the app1 script is already injected by the Vite plugin
 // In production mode, we need to load it manually
 if (!import.meta.env.DEV) {
   const app1Url = import.meta.env.VITE_APP1_URL;
-  console.log(`Loading app1 in production from: ${app1Url}`);
   
   // Create and append script for production
   const script = document.createElement('script');
