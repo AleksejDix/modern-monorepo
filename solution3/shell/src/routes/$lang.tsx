@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
-import {
-  createFileRoute,
-  Outlet,
-  FileRoutesByPath,
-} from "@tanstack/react-router";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { supportedLngs, defaultLng } from "../i18n";
+import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "../constants/languages";
 
 // Declare route path type
 declare module "@tanstack/react-router" {
@@ -31,7 +27,7 @@ const LangLayout: React.FC = () => {
 
   // Set language based on URL parameter
   useEffect(() => {
-    if (lang && supportedLngs.includes(lang) && i18n.language !== lang) {
+    if (lang && SUPPORTED_LANGUAGES.includes(lang) && i18n.language !== lang) {
       i18n.changeLanguage(lang);
     }
   }, [lang, i18n]);
@@ -44,9 +40,9 @@ export const Route = createFileRoute("/$lang")({
   parseParams: (params) => ({
     lang:
       (params as { lang?: string }).lang &&
-      supportedLngs.includes((params as { lang: string }).lang)
+      SUPPORTED_LANGUAGES.includes((params as { lang: string }).lang)
         ? (params as { lang: string }).lang
-        : defaultLng,
+        : DEFAULT_LANGUAGE,
   }),
   component: LangLayout,
 });

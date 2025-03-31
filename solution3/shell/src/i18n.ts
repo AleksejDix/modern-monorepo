@@ -1,14 +1,12 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "./constants/languages";
 
 // Import translations
 import enTranslation from "./locales/en.json";
 import deTranslation from "./locales/de.json";
-
-// Define supported languages
-export const supportedLngs = ["en", "de"];
-export const defaultLng = "en";
+import ruTranslation from "./locales/ru.json";
 
 // Initialize i18next
 i18n
@@ -25,9 +23,12 @@ i18n
       de: {
         translation: deTranslation,
       },
+      ru: {
+        translation: ruTranslation,
+      },
     },
-    fallbackLng: defaultLng,
-    supportedLngs,
+    fallbackLng: DEFAULT_LANGUAGE,
+    supportedLngs: SUPPORTED_LANGUAGES,
     debug: import.meta.env.DEV,
 
     interpolation: {

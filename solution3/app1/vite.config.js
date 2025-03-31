@@ -9,6 +9,11 @@ export default defineConfig({
     cors: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "X-Requested-With, Content-Type, Authorization, Origin, Accept",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Max-Age": "86400",
     },
   },
   preview: {

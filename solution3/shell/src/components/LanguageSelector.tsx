@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "@tanstack/react-router";
+import { LANGUAGES } from "../constants/languages";
 
 const LanguageSelector: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -29,20 +30,17 @@ const LanguageSelector: React.FC = () => {
 
   return (
     <div className="language-selector">
-      <span>{t("languageSelector.label", "Language")}: </span>
+      <span>{t("languageSelector.label")}: </span>
       <div className="language-buttons">
-        <button
-          onClick={() => switchLanguage("en")}
-          className={i18n.language === "en" ? "active" : ""}
-        >
-          English
-        </button>
-        <button
-          onClick={() => switchLanguage("de")}
-          className={i18n.language === "de" ? "active" : ""}
-        >
-          Deutsch
-        </button>
+        {Object.values(LANGUAGES).map((language) => (
+          <button
+            key={language.code}
+            onClick={() => switchLanguage(language.code)}
+            className={i18n.language === language.code ? "active" : ""}
+          >
+            {language.nativeName}
+          </button>
+        ))}
       </div>
     </div>
   );

@@ -54,9 +54,33 @@ export default defineConfig(({ mode }) => {
       hmr: {
         port: 5000,
       },
+      cors: true,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods":
+          "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers":
+          "X-Requested-With, Content-Type, Authorization, Origin, Accept",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Max-Age": "86400",
+        "Content-Security-Policy":
+          "default-src 'self' http://localhost:5003 http://localhost:5004; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:5003 http://localhost:5004; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:5003 http://localhost:5004 ws://localhost:*",
+      },
     },
     preview: {
       port: 5000,
+      cors: true,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods":
+          "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers":
+          "X-Requested-With, Content-Type, Authorization, Origin, Accept",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Max-Age": "86400",
+        "Content-Security-Policy":
+          "default-src 'self' http://localhost:5003 http://localhost:5004; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:5003 http://localhost:5004; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:5003 http://localhost:5004 ws://localhost:*",
+      },
     },
     build: {
       target: "esnext",

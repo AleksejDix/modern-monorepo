@@ -18,8 +18,6 @@
     }
   },
   "languageSelector": {
-    "label": "Language",
-    "en": "English",
-    "de": "German"
+    "label": "Language"
   }
 }

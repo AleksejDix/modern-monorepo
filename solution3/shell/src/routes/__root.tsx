@@ -7,11 +7,11 @@ import {
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "../components/LanguageSelector";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { defaultLng } from "../i18n";
+import { DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from "../constants/languages";
 
 function Layout() {
   const { t, i18n } = useTranslation();
-  const currentLang = i18n.language || defaultLng;
+  const currentLang = i18n.language || DEFAULT_LANGUAGE;
 
   return (
     <div className="app">
@@ -61,7 +61,7 @@ export const Route = createRootRoute({
     // If we're at the root, redirect to the default language
     if (location.pathname === "/") {
       return redirect({
-        to: `/${defaultLng}/` as any,
+        to: `/${DEFAULT_LANGUAGE}/`,
       });
     }
 
@@ -70,9 +70,9 @@ export const Route = createRootRoute({
     const segments = path.split("/").filter(Boolean);
 
     // If the path doesn't start with a language code and isn't root, add language
-    if (segments.length > 0 && !["en", "de"].includes(segments[0])) {
+    if (segments.length > 0 && !SUPPORTED_LANGUAGES.includes(segments[0])) {
       return redirect({
-        to: `/${defaultLng}${path}` as any,
+        to: `/${DEFAULT_LANGUAGE}${path}`,
       });
     }
   },
