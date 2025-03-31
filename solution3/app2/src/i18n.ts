@@ -1,6 +1,5 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
 
 // Import translations
 import enTranslation from "./locales/en.json";
@@ -17,8 +16,6 @@ export const DEFAULT_LANGUAGE = "de";
 i18n
   // Pass the i18n instance to react-i18next
   .use(initReactI18next)
-  // Use language detector
-  .use(LanguageDetector)
   // Initialize configuration
   .init({
     resources: {
@@ -41,18 +38,9 @@ i18n
     fallbackLng: DEFAULT_LANGUAGE,
     supportedLngs: SUPPORTED_LANGUAGES,
 
-    // Prioritize localStorage over path
-    detection: {
-      order: ["localStorage", "navigator", "path"],
-      lookupFromPathIndex: 0,
-    },
-
     interpolation: {
       escapeValue: false, // React already escapes values
     },
   });
-
-// Make i18n instance available globally for Web Component
-window.i18n = i18n;
 
 export default i18n;
