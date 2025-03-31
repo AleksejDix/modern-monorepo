@@ -6,9 +6,9 @@ import appStyles from "./App.css?inline"; // Import CSS as a string using Vite's
 import "react/jsx-runtime";
 
 /**
- * Web Component Implementation for App1
+ * Web Component Implementation for App2
  */
-class App1Element extends HTMLElement {
+class App2Element extends HTMLElement {
   constructor() {
     super();
     // Create shadow root for style isolation
@@ -16,11 +16,11 @@ class App1Element extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log("App1Element connected");
+    console.log("App2Element connected");
 
     // Create container for React
     const container = document.createElement("div");
-    container.id = "app1-root";
+    container.id = "app2-root";
     this.shadowRoot.appendChild(container);
 
     // Add isolated styles
@@ -42,9 +42,9 @@ class App1Element extends HTMLElement {
 }
 
 // Register custom element
-if (!customElements.get("app1-element")) {
-  customElements.define("app1-element", App1Element);
+if (!customElements.get("app2-element")) {
+  customElements.define("app2-element", App2Element);
 }
 
 // Export for direct JavaScript imports
-export { App1Element };
+export { App2Element };

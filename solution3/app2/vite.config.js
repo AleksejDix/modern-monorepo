@@ -5,19 +5,20 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5003,
+    port: 5004,
     cors: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
   },
   preview: {
-    port: 5003,
+    port: 5004,
     cors: true,
   },
   build: {
     target: "esnext",
     outDir: "dist",
+    // Don't minify to make debugging easier
     minify: false,
     rollupOptions: {
       preserveEntrySignatures: "exports-only",

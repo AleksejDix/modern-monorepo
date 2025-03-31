@@ -6,6 +6,10 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import enTranslation from "./locales/en.json";
 import deTranslation from "./locales/de.json";
 
+// Define supported languages
+export const supportedLngs = ["en", "de"];
+export const defaultLng = "en";
+
 // Initialize i18next
 i18n
   // Detect user language
@@ -22,7 +26,8 @@ i18n
         translation: deTranslation,
       },
     },
-    fallbackLng: "en",
+    fallbackLng: defaultLng,
+    supportedLngs,
     debug: import.meta.env.DEV,
 
     interpolation: {

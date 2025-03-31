@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:all": "cd ../app1 && npm run build && cd ../app2 && npm run build && cd ../shell && npm run build",
     "build:prod": "VITE_APP1_URL=/assets/app1/index.js vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "start": "npm run dev",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "generate-routes": "npx @tanstack/router-cli@1 v0 generate-route-tree"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.114.29",
@@ -23,6 +25,7 @@
   "devDependencies": {
     "@tanstack/react-router-devtools": "^1.114.29",
     "@tanstack/router-plugin": "^1.114.30",
+    "@types/node": "^22.13.14",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.0.3",
