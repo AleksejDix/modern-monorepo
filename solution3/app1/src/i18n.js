@@ -13,27 +13,11 @@ import ruTranslation from "./locales/ru.json";
 export const SUPPORTED_LANGUAGES = ["en", "de", "fr", "it", "ru"];
 export const DEFAULT_LANGUAGE = "de";
 
-// Extract language from URL path - expected format: "/lang/..."
-const extractLanguageFromURL = () => {
-  const urlPath = window.location.pathname;
-  const pathSegments = urlPath.split("/").filter(Boolean);
-
-  // Check if first segment is a language code
-  if (
-    pathSegments.length > 0 &&
-    SUPPORTED_LANGUAGES.includes(pathSegments[0])
-  ) {
-    return pathSegments[0];
-  }
-
-  return null;
-};
-
 // Initialize i18next
 i18n
   // Pass the i18n instance to react-i18next
   .use(initReactI18next)
-  // Use language detector as fallback
+  // Use language detector
   .use(LanguageDetector)
   // Initialize configuration
   .init({
@@ -67,16 +51,6 @@ i18n
       escapeValue: false, // React already escapes values
     },
   });
-
-// Set initial language from URL if available, but ONLY if no localStorage preference
-const urlLang = extractLanguageFromURL();
-const storedLang = localStorage.getItem("i18nextLng");
-
-if (urlLang && !storedLang && SUPPORTED_LANGUAGES.includes(urlLang)) {
-  i18n.changeLanguage(urlLang);
-} else if (storedLang && SUPPORTED_LANGUAGES.includes(storedLang)) {
-  i18n.changeLanguage(storedLang);
-}
 
 // Make i18n instance available globally for Web Component
 window.i18n = i18n;

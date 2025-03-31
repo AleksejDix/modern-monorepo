@@ -44,7 +44,7 @@ i18n
     },
 
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["localStorage", "navigator", "path"],
       caches: ["localStorage"],
     },
   });
