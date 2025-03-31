@@ -8,12 +8,25 @@ const LangLayout: React.FC = () => {
   const { lang } = Route.useParams();
   const { i18n } = useTranslation();
 
-  // Set language based on URL parameter
+  // Set language based on URL parameter, but respecting localStorage preference
   useEffect(() => {
-    if (lang && SUPPORTED_LANGUAGES.includes(lang) && i18n.language !== lang) {
+    // Get stored language preference
+    const storedLang = localStorage.getItem("i18nextLng");
+
+    if (storedLang && SUPPORTED_LANGUAGES.includes(storedLang)) {
+      // Use stored language if available and supported
+      if (i18n.language !== storedLang) {
+        i18n.changeLanguage(storedLang);
+      }
+    } else if (
+      lang &&
+      SUPPORTED_LANGUAGES.includes(lang) &&
+      i18n.language !== lang
+    ) {
+      // Fallback to URL language if no stored preference
       i18n.changeLanguage(lang);
 
-      // Also save to localStorage
+      // Store in localStorage for future visits
       localStorage.setItem("i18nextLng", lang);
     }
   }, [lang, i18n]);

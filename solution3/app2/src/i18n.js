@@ -57,9 +57,9 @@ i18n
     fallbackLng: DEFAULT_LANGUAGE,
     supportedLngs: SUPPORTED_LANGUAGES,
 
-    // Use URL language as primary source
+    // Prioritize localStorage over path
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["localStorage", "navigator", "path"],
       lookupFromPathIndex: 0,
     },
 
@@ -68,10 +68,14 @@ i18n
     },
   });
 
-// Set initial language from URL if available
+// Set initial language from URL if available, but ONLY if no localStorage preference
 const urlLang = extractLanguageFromURL();
-if (urlLang) {
+const storedLang = localStorage.getItem("i18nextLng");
+
+if (urlLang && !storedLang && SUPPORTED_LANGUAGES.includes(urlLang)) {
   i18n.changeLanguage(urlLang);
+} else if (storedLang && SUPPORTED_LANGUAGES.includes(storedLang)) {
+  i18n.changeLanguage(storedLang);
 }
 
 // Make i18n instance available globally for Web Component

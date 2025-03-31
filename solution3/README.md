@@ -218,38 +218,50 @@ graph TD
     subgraph "Shell Application"
         A[User selects language] --> B[Shell changes language]
         B --> C[Shell updates URL path]
-        B --> D[Shell updates localStorage]
+        B --> D[Shell stores in localStorage]
         B --> E[Shell sets lang attribute]
     end
 
     subgraph "Microfrontends (App1, App2)"
-        F[i18n initialization] --> G[Extract language from URL path]
-        G --> H{Language in URL?}
-        H -- Yes --> I[Use URL language]
-        H -- No --> J[Check localStorage]
-        J --> K{Language in localStorage?}
-        K -- Yes --> L[Use localStorage language]
-        K -- No --> M[Use browser language or default 'de']
+        F[i18n initialization] --> G[Check language sources]
+        G --> H{localStorage?}
+        H -- Yes --> I[Use localStorage language]
+        H -- No --> J[Check browser language]
+        J --> K{Browser language supported?}
+        K -- Yes --> L[Use browser language]
+        K -- No --> M[Check URL path]
+        M --> N{URL has language?}
+        N -- Yes --> O[Use URL language]
+        N -- No --> P[Use default 'de']
 
-        P[URL contains language code] --> G
-        Q[lang attribute changes] --> R[Update language]
+        Q[lang attribute changes] -.-> R[Only used if no localStorage]
     end
 
-    C --> P
+    D --> H
+    C --> N
     E --> Q
 
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style B fill:#bbf,stroke:#333,stroke-width:2px
-    style M fill:#bfb,stroke:#333,stroke-width:2px
+    style I fill:#bfb,stroke:#333,stroke-width:2px
     style Q fill:#afa,stroke:#333,stroke-width:2px
 ```
 
 ## Language Detection Priority
 
-1. **URL Path**: The first segment in the URL path (/en/app1, /de/app2, etc.)
-2. **localStorage**: Previously selected user preference
-3. **Browser Language**: User's browser language setting
-4. **Default**: German (de) if no other language is detected
+In this application, user language preferences are prioritized as follows:
+
+1. **User's stored preference** (localStorage)
+2. **Browser language** setting
+3. **URL language** code
+4. **Default language** (German)
+
+This approach ensures that:
+
+- Users always see the application in their preferred language
+- When colleagues from different language regions share links, each recipient sees content in their own language
+- The URL language only applies to new users with no stored preference
+- The application behaves consistently across all microfrontends
 
 ## How Translation Works
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document details the internationalization (i18n) implementation in our microfrontend architecture. The system uses URL-based language detection with localStorage as a fallback, and passes the current language as a web component attribute for direct synchronization between the shell and microfrontends.
+This document details the internationalization (i18n) implementation in our microfrontend architecture for an internal application used by workers from different parts of Switzerland. The system prioritizes user language preferences stored in localStorage over URL language codes to ensure consistent language experience even when sharing links.
 
 ## Current Languages
 
@@ -30,26 +30,26 @@ flowchart TD
 
     %% App1 Language Detection
     A1[App1 Initialization] --> AD1[Language Detection]
-    URL --> AD1
     LS --> AD1
+    URL --> AD1
     AD1 --> AC1[Apply Translation]
 
     %% App2 Language Detection
     A2[App2 Initialization] --> AD2[Language Detection]
-    URL --> AD2
     LS --> AD2
+    URL --> AD2
     AD2 --> AC2[Apply Translation]
 
     %% Language Attribute
     S3 --> LA1[lang Attribute App1]
     S3 --> LA2[lang Attribute App2]
-    LA1 --> AC1
-    LA2 --> AC2
+    LA1 -.-> AC1
+    LA2 -.-> AC2
 
     %% Language Detection Priority
     subgraph "Language Detection Priority"
         direction TB
-        P1[1. lang Attribute] --> P2[2. URL Path] --> P3[3. localStorage] --> P4[4. Browser Language] --> P5[5. Default (de)]
+        P1[1. localStorage] --> P2[2. Browser Language] --> P3[3. URL Path] --> P4[4. lang Attribute] --> P5[5. Default (de)]
     end
 
     %% Styles
@@ -80,28 +80,34 @@ const switchLanguage = (lng: string): void => {
   // Change language in i18n
   i18n.changeLanguage(lng);
 
-  // Save to localStorage
+  // Save to localStorage - this is the user's preference
   localStorage.setItem("i18nextLng", lng);
 
   // Update URL
   navigate(`/${lng}${pathAfterLang}`);
 };
 
-// In DynamicAppPage.tsx - passing language to microfrontends
-function DynamicAppPage() {
-  const { appId, lang } = Route.useParams();
-  const { i18n } = useTranslation();
+// In $lang.tsx route
+useEffect(() => {
+  // Get stored language preference
+  const storedLang = localStorage.getItem("i18nextLng");
 
-  // Create element with lang attribute
-  return React.createElement(`${appId}-element`, {
-    lang: lang || i18n.language,
-  });
-}
+  if (storedLang && SUPPORTED_LANGUAGES.includes(storedLang)) {
+    // Use stored language if available and supported
+    if (i18n.language !== storedLang) {
+      i18n.changeLanguage(storedLang);
+    }
+  } else if (lang && SUPPORTED_LANGUAGES.includes(lang)) {
+    // Fallback to URL language if no stored preference
+    i18n.changeLanguage(lang);
+    localStorage.setItem("i18nextLng", lang);
+  }
+}, [lang, i18n]);
 ```
 
 ### Microfrontends (App1, App2)
 
-Each microfrontend implements a Web Component that observes language changes via the `lang` attribute:
+Each microfrontend implements a Web Component that prioritizes localStorage over other language sources:
 
 ```javascript
 // Web Component implementation
@@ -114,8 +120,14 @@ class App1Element extends HTMLElement {
   // Handle attribute changes
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === "lang" && oldValue !== newValue && newValue) {
-      // Change language when attribute changes
-      if (window.i18n && SUPPORTED_LANGUAGES.includes(newValue)) {
+      // Only change language if there's no localStorage preference
+      const storedLang = localStorage.getItem("i18nextLng");
+
+      if (
+        !storedLang &&
+        window.i18n &&
+        SUPPORTED_LANGUAGES.includes(newValue)
+      ) {
         window.i18n.changeLanguage(newValue);
       }
     }
@@ -125,16 +137,25 @@ class App1Element extends HTMLElement {
     // Initialize React app
     // ...
 
-    // Set initial language if attribute is present
-    const lang = this.getAttribute("lang");
-    if (lang && SUPPORTED_LANGUAGES.includes(lang)) {
-      window.i18n.changeLanguage(lang);
+    // Only set initial language from attribute if no localStorage preference
+    const storedLang = localStorage.getItem("i18nextLng");
+    if (!storedLang) {
+      const lang = this.getAttribute("lang");
+      if (lang && SUPPORTED_LANGUAGES.includes(lang)) {
+        window.i18n.changeLanguage(lang);
+      }
     }
   }
 }
 
-// Register custom element
-customElements.define("app1-element", App1Element);
+// i18n initialization
+i18n.init({
+  // ...
+  detection: {
+    order: ["localStorage", "navigator", "path"],
+    lookupFromPathIndex: 0,
+  },
+});
 ```
 
 ## Translation Files Structure
@@ -172,24 +193,20 @@ URL structure follows the pattern:
 /{language}/{route}
 ```
 
-- Example: `/en/app1` - English version of App1
-- Example: `/de/app2` - German version of App2
+- Example: `/en/app1` - URL has English language segment
+- Example: `/fr/app2` - URL has French language segment
 
-When a URL with an unsupported language code is accessed, the application returns a 404 error.
+However, unlike typical i18n implementations, **the URL language is not given priority**. This means:
 
-## Web Component Attribute Synchronization
+- If a German-speaking user receives a link with `/fr/app1`, they will still see the content in German
+- The URL language is only used when the user has no stored language preference
 
-The application uses the standard Web Component attribute system for passing the current language:
-
-1. Shell sets the `lang` attribute on the microfrontend Web Components
-2. Microfrontends observe changes to this attribute via `observedAttributes` and `attributeChangedCallback`
-3. When the attribute changes, the microfrontend updates its internal language setting
-4. This provides real-time language updates without needing custom events or page reloads
+This behavior is designed specifically for an internal application where workers from different language regions in Switzerland may share links with each other.
 
 ## Best Practices
 
-1. **Attribute-based Communication**: Using standard Web Component attributes for passing language information
-2. **Isolated Translations**: Each application only contains translations relevant to its own functionality
-3. **Centralized Language Selection**: Only the shell provides UI for language selection
-4. **URL for Deep Linking**: URL structure preserves language preference in shareable links
-5. **Graceful Fallbacks**: Multiple fallback levels from attribute to URL to localStorage to browser preference to default language
+1. **User Preference Priority**: localStorage language preference always takes precedence
+2. **Consistent Experience**: Users always see content in their preferred language regardless of URL
+3. **Isolated Translations**: Each application only contains translations relevant to its own functionality
+4. **Centralized Language Selection**: Only the shell provides UI for language selection
+5. **Graceful Fallbacks**: Multiple fallback levels from localStorage to browser preference to URL path to default language

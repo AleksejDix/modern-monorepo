@@ -26,8 +26,14 @@ class App1Element extends HTMLElement {
   // Handle attribute changes
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === "lang" && oldValue !== newValue && newValue) {
-      // Change language when attribute changes
-      if (window.i18n && SUPPORTED_LANGUAGES.includes(newValue)) {
+      // Only change language if there's no localStorage preference
+      const storedLang = localStorage.getItem("i18nextLng");
+
+      if (
+        !storedLang &&
+        window.i18n &&
+        SUPPORTED_LANGUAGES.includes(newValue)
+      ) {
         window.i18n.changeLanguage(newValue);
       }
     }
@@ -57,10 +63,13 @@ class App1Element extends HTMLElement {
     const root = ReactDOM.createRoot(container);
     root.render(<App />);
 
-    // Set initial language if attribute is present
-    const lang = this.getAttribute("lang");
-    if (lang && SUPPORTED_LANGUAGES.includes(lang)) {
-      window.i18n.changeLanguage(lang);
+    // Only set initial language from attribute if no localStorage preference
+    const storedLang = localStorage.getItem("i18nextLng");
+    if (!storedLang) {
+      const lang = this.getAttribute("lang");
+      if (lang && SUPPORTED_LANGUAGES.includes(lang)) {
+        window.i18n.changeLanguage(lang);
+      }
     }
   }
 }
