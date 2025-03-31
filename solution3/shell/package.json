@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:analyze": "ANALYZE=true tsc && vite build",
     "build:all": "cd ../app1 && npm run build && cd ../app2 && npm run build && cd ../shell && npm run build",
     "build:prod": "VITE_APP1_URL=/assets/app1/index.js vite build",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "start": "npm run dev",
     "typecheck": "tsc --noEmit",
@@ -16,24 +17,26 @@
   },
   "dependencies": {
     "@tanstack/react-router": "^1.114.29",
-    "i18next": "^23.8.2",
-    "i18next-browser-languagedetector": "^7.2.0",
+    "@tanstack/react-router-devtools": "^1.114.29",
+    "i18next": "^23.10.0",
+    "i18next-browser-languagedetector": "^7.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^14.0.5"
   },
   "devDependencies": {
-    "@tanstack/react-router-devtools": "^1.114.29",
     "@tanstack/router-plugin": "^1.114.30",
     "@types/node": "^22.13.14",
-    "@types/react": "^18.2.56",
-    "@types/react-dom": "^18.2.19",
-    "@vitejs/plugin-react": "^4.0.3",
-    "eslint": "^8.45.0",
-    "eslint-plugin-react": "^7.32.2",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.3",
-    "typescript": "^5.3.3",
-    "vite": "^4.4.5"
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "rollup-plugin-visualizer": "^5.12.0",
+    "terser": "^5.29.2",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.1"
   }
 }

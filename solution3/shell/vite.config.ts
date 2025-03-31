@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import { visualizer } from "rollup-plugin-visualizer";
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const isDev = mode === "development";
@@ -18,6 +20,13 @@ export default defineConfig(({ mode }) => {
     plugins: [
       TanStackRouterVite({ target: "react" }),
       react(),
+      process.env.ANALYZE === "true" &&
+        visualizer({
+          open: true,
+          filename: "stats.html",
+          gzipSize: true,
+          brotliSize: true,
+        }),
       {
         name: "inject-mfe-scripts",
         transformIndexHtml() {
@@ -43,7 +52,7 @@ export default defineConfig(({ mode }) => {
           };
         },
       },
-    ],
+    ].filter(Boolean),
     define: {
       "import.meta.env.VITE_APP1_URL": JSON.stringify(app1Url),
       "import.meta.env.VITE_APP2_URL": JSON.stringify(app2Url),
@@ -85,6 +94,14 @@ export default defineConfig(({ mode }) => {
     build: {
       target: "esnext",
       outDir: "dist",
+      minify: "terser",
+      terserOptions: {
+        compress: {
+          drop_console: !isDev,
+          drop_debugger: !isDev,
+        },
+      },
+      sourcemap: isDev,
     },
     resolve: {
       dedupe: ["react", "react-dom"],

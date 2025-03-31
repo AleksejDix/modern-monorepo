@@ -1,11 +1,25 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    process.env.ANALYZE === "true" &&
+      visualizer({
+        open: true,
+        filename: "stats.html",
+        gzipSize: true,
+        brotliSize: true,
+      }),
+  ].filter(Boolean),
   server: {
     port: 5003,
+    strictPort: true,
+    hmr: {
+      port: 5003,
+    },
     cors: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -23,7 +37,13 @@ export default defineConfig({
   build: {
     target: "esnext",
     outDir: "dist",
-    minify: false,
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
     rollupOptions: {
       preserveEntrySignatures: "exports-only",
       output: {
