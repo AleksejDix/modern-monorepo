@@ -1,0 +1,25 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "app1": "App 1",
+    "app2": "App 2"
+  },
+  "home": {
+    "title": "Willkommen bei der Micro-Frontend-Demo",
+    "description": "Diese Shell-Anwendung lädt unabhängige Microfrontends ohne gemeinsame Abhängigkeiten.",
+    "features": {
+      "title": "Jedes Microfrontend:",
+      "items": {
+        "dependencies": "Hat eigene gebündelte Abhängigkeiten (keine Import-Maps)",
+        "styling": "Verwendet Shadow DOM für Stil-Isolation",
+        "deployment": "Kann unabhängig bereitgestellt werden",
+        "communication": "Kommuniziert nur über benutzerdefinierte Events"
+      }
+    }
+  },
+  "languageSelector": {
+    "label": "Sprache",
+    "en": "Englisch",
+    "de": "Deutsch"
+  }
+}

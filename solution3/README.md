@@ -5,13 +5,15 @@ This solution implements a micro frontend architecture where each micro frontend
 1. No shared dependencies across micro frontends (no import maps)
 2. Web Components with Shadow DOM for CSS isolation
 3. All applications built with React, each with its own bundled React instance
-4. Custom events for cross-micro-frontend communication
+4. TanStack Router for robust routing in the shell
+5. Custom events for cross-micro-frontend communication
 
 ## Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                      Shell App                           │
+│                      (TanStack Router)                   │
 │                                                         │
 │  ┌─────────────────┐        ┌─────────────────────┐     │
 │  │      App1       │        │        App2         │     │
@@ -25,7 +27,7 @@ This solution implements a micro frontend architecture where each micro frontend
 └─────────────────────────────────────────────────────────┘
 ```
 
-- **Shell**: Container application that handles routing and composition
+- **Shell**: Container application with TanStack Router that handles routing and composition
 - **App1**: Dashboard micro frontend (React wrapped in Web Component with Shadow DOM)
 - **App2**: Settings micro frontend (React wrapped in Web Component with Shadow DOM)
 
@@ -36,19 +38,55 @@ This solution implements a micro frontend architecture where each micro frontend
 3. **Zero Shared Runtime**: No risk of conflicts between micro frontends
 4. **Independent Deployment**: Any micro frontend can be deployed at any time
 5. **Isolation by Default**: Shadow DOM provides complete CSS and DOM isolation
+6. **Robust Routing**: TanStack Router provides type-safe routing with code splitting capabilities
 
 ## Implementation Details
 
-### Web Components with Closed Shadow DOM
+### TanStack Router for Shell Routing
 
-Each micro frontend is encapsulated in a Web Component with closed mode Shadow DOM for maximum isolation:
+The shell application uses TanStack Router for advanced routing capabilities:
+
+```javascript
+// Define routes with TanStack Router
+const rootRoute = createRootRoute({
+  component: RootComponent,
+});
+
+const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/",
+  component: HomePage,
+});
+
+const app1Route = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/app1",
+  component: App1Page,
+  beforeLoad: () => {
+    // Dynamically load the app1 microfrontend
+    loadMicrofrontend("app1");
+  },
+});
+
+// Create and register the router
+const routeTree = rootRoute.addChildren([indexRoute, app1Route, app2Route]);
+
+export const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+});
+```
+
+### Web Components with Shadow DOM
+
+Each micro frontend is encapsulated in a Web Component with Shadow DOM for style isolation:
 
 ```javascript
 class App1Element extends HTMLElement {
   constructor() {
     super();
-    // Using closed mode for better encapsulation
-    this.attachShadow({ mode: "closed" });
+    // Create shadow root for isolation
+    this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
@@ -91,20 +129,24 @@ build: {
 The shell dynamically loads micro frontends based on the current route:
 
 ```javascript
-const loadMicrofrontend = async (name) => {
+const loadMicrofrontend = (name) => {
+  const scriptId = `${name}-script`;
+
+  // Skip if already loaded
+  if (document.getElementById(scriptId)) {
+    return;
+  }
+
   const script = document.createElement("script");
   script.type = "module";
+  script.id = scriptId;
 
   const baseUrl = import.meta.env.DEV
     ? `http://localhost:${name === "app1" ? "5003" : "5004"}`
     : import.meta.env[`VITE_${name.toUpperCase()}_URL`];
 
   script.src = `${baseUrl}/src/index.js`;
-  script.id = `${name}-script`;
-
-  if (!document.querySelector(`script[id="${script.id}"]`)) {
-    document.head.appendChild(script);
-  }
+  document.head.appendChild(script);
 };
 ```
 
@@ -147,6 +189,7 @@ window.addEventListener("theme-change", (event) => {
 | Team Independence   | Medium (shared runtime)        | Medium (shared deps)                      | Maximum (no shared code)       |
 | Deployment          | Coordinated                    | Mostly independent                        | Completely independent         |
 | Framework Freedom   | Limited to webpack ecosystem   | Limited to frameworks with ESM support    | Complete freedom               |
+| Routing             | Custom or framework router     | Custom or framework router                | TanStack Router (advanced)     |
 
 ## Pros and Cons
 
@@ -157,6 +200,8 @@ window.addEventListener("theme-change", (event) => {
 - No risk of dependency conflicts
 - Maximum technology freedom
 - Robust isolation by default
+- Advanced routing with TanStack Router
+- Type-safe navigation (when using TypeScript)
 
 ### Cons
 

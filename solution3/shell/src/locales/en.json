@@ -1,0 +1,25 @@
+{
+  "navigation": {
+    "home": "Home",
+    "app1": "App 1",
+    "app2": "App 2"
+  },
+  "home": {
+    "title": "Welcome to the Micro Frontend Demo",
+    "description": "This shell application loads independent microfrontends with no shared dependencies.",
+    "features": {
+      "title": "Each microfrontend:",
+      "items": {
+        "dependencies": "Has its own bundled dependencies (no import maps)",
+        "styling": "Uses Shadow DOM for style isolation",
+        "deployment": "Can be deployed independently",
+        "communication": "Communicates via custom events only"
+      }
+    }
+  },
+  "languageSelector": {
+    "label": "Language",
+    "en": "English",
+    "de": "German"
+  }
+}

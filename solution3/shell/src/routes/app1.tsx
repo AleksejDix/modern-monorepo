@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-import React from "react";
+import { loadMicrofrontend } from "../utils";
 
 export const Route = createFileRoute("/app1")({
-  component: Index,
+  component: App1Page,
+  beforeLoad: () => {
+    // Dynamically load the app1 microfrontend
+    loadMicrofrontend("app1");
+  },
 });
 
-function Index() {
-  return (
-    <div>
-      <app1-element></app1-element>
-    </div>
-  );
+function App1Page() {
+  return <app1-element key="app1"></app1-element>;
 }
