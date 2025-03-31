@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import "./i18n"; // Import and initialize i18n
 
 function App() {
+  const { t } = useTranslation();
   const [count, setCount] = useState(0);
   const [theme, setTheme] = useState("light");
 
@@ -24,19 +27,22 @@ function App() {
 
   return (
     <div className={`dashboard-container ${theme}`}>
-      <h1>App 2 Dashboard</h1>
+      <h1>{t("app2.title")}</h1>
+
       <div className="controls">
-        <button onClick={handleClick}>Count: {count}</button>
-        <button onClick={toggleTheme}>Toggle Theme</button>
+        <button onClick={handleClick}>
+          {t("app2.controls.count", { count })}
+        </button>
+        <button onClick={toggleTheme}>{t("app2.controls.toggleTheme")}</button>
       </div>
       <div className="content">
-        <p>This is a completely independent microfrontend.</p>
-        <p>It has its own:</p>
+        <p>{t("app2.content.intro")}</p>
+        <p>{t("app2.content.ownItems")}</p>
         <ul>
-          <li>State management</li>
-          <li>Styling (isolated by Shadow DOM)</li>
-          <li>Dependencies</li>
-          <li>Routing (if needed)</li>
+          <li>{t("app2.content.features.stateManagement")}</li>
+          <li>{t("app2.content.features.styling")}</li>
+          <li>{t("app2.content.features.dependencies")}</li>
+          <li>{t("app2.content.features.routing")}</li>
         </ul>
       </div>
     </div>

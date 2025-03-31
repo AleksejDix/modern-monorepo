@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { waitForCustomElement } from "../utils";
 
 interface AppRouteParams {
@@ -12,7 +13,8 @@ export const Route = createFileRoute("/$lang/$appId")({
 });
 
 function DynamicAppPage() {
-  const { appId } = Route.useParams();
+  const { appId, lang } = Route.useParams();
+  const { i18n } = useTranslation();
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -26,5 +28,8 @@ function DynamicAppPage() {
     return <div>Loading {appId}...</div>;
   }
 
-  return React.createElement(`${appId}-element`);
+  // Create element with lang attribute
+  return React.createElement(`${appId}-element`, {
+    lang: lang || i18n.language,
+  });
 }

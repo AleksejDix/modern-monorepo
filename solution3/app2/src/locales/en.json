@@ -1,0 +1,19 @@
+{
+  "app2": {
+    "title": "App 2 Dashboard",
+    "controls": {
+      "count": "Count: {{count}}",
+      "toggleTheme": "Toggle Theme"
+    },
+    "content": {
+      "intro": "This is a completely independent microfrontend.",
+      "ownItems": "It has its own:",
+      "features": {
+        "stateManagement": "State management",
+        "styling": "Styling (isolated by Shadow DOM)",
+        "dependencies": "Dependencies",
+        "routing": "Routing (if needed)"
+      }
+    }
+  }
+}

@@ -25,6 +25,16 @@ export const LANGUAGES: Record<string, Language> = {
     name: "German",
     nativeName: "Deutsch",
   },
+  fr: {
+    code: "fr",
+    name: "French",
+    nativeName: "Français",
+  },
+  it: {
+    code: "it",
+    name: "Italian",
+    nativeName: "Italiano",
+  },
   ru: {
     code: "ru",
     name: "Russian",
@@ -40,4 +50,4 @@ export const SUPPORTED_LANGUAGES = Object.keys(LANGUAGES);
 /**
  * Default language code
  */
-export const DEFAULT_LANGUAGE = "en";
+export const DEFAULT_LANGUAGE = "de";

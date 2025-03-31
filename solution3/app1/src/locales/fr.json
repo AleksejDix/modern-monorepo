@@ -1,0 +1,19 @@
+{
+  "app1": {
+    "title": "Tableau de bord App 1",
+    "controls": {
+      "count": "Compteur: {{count}}",
+      "toggleTheme": "Changer de thème"
+    },
+    "content": {
+      "intro": "Ceci est un microfrontend complètement indépendant.",
+      "ownItems": "Il a ses propres:",
+      "features": {
+        "stateManagement": "Gestion d'état",
+        "styling": "Style (isolé par Shadow DOM)",
+        "dependencies": "Dépendances",
+        "routing": "Routage (si nécessaire)"
+      }
+    }
+  }
+}

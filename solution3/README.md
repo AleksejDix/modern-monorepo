@@ -150,26 +150,6 @@ const loadMicrofrontend = (name) => {
 };
 ```
 
-### Custom Events for Communication
-
-Micro frontends communicate via custom events instead of direct imports:
-
-```javascript
-// App1 dispatching an event
-window.dispatchEvent(
-  new CustomEvent("theme-change", {
-    bubbles: true,
-    composed: true, // Allows events to cross shadow DOM boundaries
-    detail: { theme: "dark" },
-  })
-);
-
-// App2 listening for the event
-window.addEventListener("theme-change", (event) => {
-  setTheme(event.detail.theme);
-});
-```
-
 ## Getting Started
 
 1. Navigate to each directory (shell, app1, app2)
@@ -209,3 +189,107 @@ window.addEventListener("theme-change", (event) => {
 - Potentially inconsistent user experience if not managed
 - Needs more initial setup for communication patterns
 - No code sharing (which can be good or bad depending on your perspective)
+
+# Microfrontend Translation System
+
+This document explains how the internationalization (i18n) system works across the shell and microfrontend applications.
+
+## Architecture Overview
+
+The application consists of:
+
+- A **Shell** application that manages routing and coordinates language changes
+- Two microfrontends (**App1** and **App2**) that each have their own isolated translation systems
+
+## Supported Languages
+
+The system currently supports:
+
+- English (en)
+- German (de) - Default language
+- French (fr)
+- Italian (it)
+- Russian (ru)
+
+## Translation Flow
+
+```mermaid
+graph TD
+    subgraph "Shell Application"
+        A[User selects language] --> B[Shell changes language]
+        B --> C[Shell updates URL path]
+        B --> D[Shell updates localStorage]
+        B --> E[Shell sets lang attribute]
+    end
+
+    subgraph "Microfrontends (App1, App2)"
+        F[i18n initialization] --> G[Extract language from URL path]
+        G --> H{Language in URL?}
+        H -- Yes --> I[Use URL language]
+        H -- No --> J[Check localStorage]
+        J --> K{Language in localStorage?}
+        K -- Yes --> L[Use localStorage language]
+        K -- No --> M[Use browser language or default 'de']
+
+        P[URL contains language code] --> G
+        Q[lang attribute changes] --> R[Update language]
+    end
+
+    C --> P
+    E --> Q
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style M fill:#bfb,stroke:#333,stroke-width:2px
+    style Q fill:#afa,stroke:#333,stroke-width:2px
+```
+
+## Language Detection Priority
+
+1. **URL Path**: The first segment in the URL path (/en/app1, /de/app2, etc.)
+2. **localStorage**: Previously selected user preference
+3. **Browser Language**: User's browser language setting
+4. **Default**: German (de) if no other language is detected
+
+## How Translation Works
+
+### Shell Application
+
+The Shell application:
+
+- Manages the primary language selection UI
+- Updates the URL when language changes
+- Has its own translation files for shell-specific content
+
+### Microfrontends
+
+Each microfrontend:
+
+- Has its own isolated i18n configuration and translation files
+- Detects language primarily from the URL path
+- Falls back to localStorage, then browser settings if URL language is not available
+- Contains only translations specific to its own functionality
+
+## Handling URL Language Segments
+
+When a user shares a URL with a language segment (e.g., `/fr/app1`):
+
+- If the language is supported, the application displays in that language, regardless of the recipient's localStorage preferences
+- If the language is unsupported, a 404 error is shown
+
+## Translation Files Structure
+
+Each application has its own locale files in a `locales` directory:
+
+- `en.json` - English translations
+- `de.json` - German translations
+- `ru.json` - Russian translations
+
+## Adding a New Language
+
+To add a new language:
+
+1. Add the language code to `SUPPORTED_LANGUAGES` in the shell and all microfrontends
+2. Create new translation files in each application
+3. Add the language to the resource configuration in each i18n initialization file
+4. Update the language selector UI in the shell application

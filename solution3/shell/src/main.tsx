@@ -6,6 +6,8 @@ import { NotFound } from "./components/NotFound";
 import { routeTree } from "./routeTree.gen";
 // Explicitly import jsx-runtime to ensure it's bundled
 import "react/jsx-runtime";
+// Import date formatter utilities
+import { exposeDateFormattersToWindow } from "./utils/dateFormat";
 
 // Create a new router instance
 const router = createRouter({
@@ -17,6 +19,9 @@ const router = createRouter({
 // Render the app
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
+  // Expose date formatters to window for microfrontends
+  exposeDateFormattersToWindow();
+
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>

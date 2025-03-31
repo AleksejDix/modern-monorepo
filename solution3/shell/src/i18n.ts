@@ -6,6 +6,8 @@ import { SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "./constants/languages";
 // Import translations
 import enTranslation from "./locales/en.json";
 import deTranslation from "./locales/de.json";
+import frTranslation from "./locales/fr.json";
+import itTranslation from "./locales/it.json";
 import ruTranslation from "./locales/ru.json";
 
 // Initialize i18next
@@ -23,6 +25,12 @@ i18n
       de: {
         translation: deTranslation,
       },
+      fr: {
+        translation: frTranslation,
+      },
+      it: {
+        translation: itTranslation,
+      },
       ru: {
         translation: ruTranslation,
       },
@@ -36,7 +44,7 @@ i18n
     },
 
     detection: {
-      order: ["localStorage", "navigator"],
+      order: ["localStorage", "path", "navigator"],
       caches: ["localStorage"],
     },
   });

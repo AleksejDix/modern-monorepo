@@ -1,0 +1,19 @@
+{
+  "app1": {
+    "title": "Dashboard App 1",
+    "controls": {
+      "count": "Contatore: {{count}}",
+      "toggleTheme": "Cambia Tema"
+    },
+    "content": {
+      "intro": "Questo è un microfrontend completamente indipendente.",
+      "ownItems": "Ha i suoi propri:",
+      "features": {
+        "stateManagement": "Gestione dello stato",
+        "styling": "Stile (isolato da Shadow DOM)",
+        "dependencies": "Dipendenze",
+        "routing": "Routing (se necessario)"
+      }
+    }
+  }
+}
