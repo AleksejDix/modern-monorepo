@@ -2,7 +2,7 @@
   "app2": {
     "title": "App 2 Dashboard",
     "controls": {
-      "count": "Count: {{count}}",
+      "count": "Count: {count}",
       "toggleTheme": "Toggle Theme"
     },
     "content": {

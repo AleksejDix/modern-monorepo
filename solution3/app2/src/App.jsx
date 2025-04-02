@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import "./i18n"; // Import and initialize i18n
+import * as translate from "./paraglide/messages";
 
 function App() {
-  const { t } = useTranslation();
   const [count, setCount] = useState(0);
   const [theme, setTheme] = useState("light");
 
@@ -27,22 +25,24 @@ function App() {
 
   return (
     <div className={`dashboard-container ${theme}`}>
-      <h1>{t("app2.title")}</h1>
+      <h1>{translate["app2.title"]()} </h1>
 
       <div className="controls">
         <button onClick={handleClick}>
-          {t("app2.controls.count", { count })}
+          {translate["app2.controls.count"]({ count })}
         </button>
-        <button onClick={toggleTheme}>{t("app2.controls.toggleTheme")}</button>
+        <button onClick={toggleTheme}>
+          {translate["app2.controls.toggleTheme"]()}
+        </button>
       </div>
       <div className="content">
-        <p>{t("app2.content.intro")}</p>
-        <p>{t("app2.content.ownItems")}</p>
+        <p>{translate["app2.content.intro"]()}</p>
+        <p>{translate["app2.content.ownItems"]()}</p>
         <ul>
-          <li>{t("app2.content.features.stateManagement")}</li>
-          <li>{t("app2.content.features.styling")}</li>
-          <li>{t("app2.content.features.dependencies")}</li>
-          <li>{t("app2.content.features.routing")}</li>
+          <li>{translate["app2.content.features.stateManagement"]()}</li>
+          <li>{translate["app2.content.features.styling"]()}</li>
+          <li>{translate["app2.content.features.dependencies"]()}</li>
+          <li>{translate["app2.content.features.routing"]()}</li>
         </ul>
       </div>
     </div>

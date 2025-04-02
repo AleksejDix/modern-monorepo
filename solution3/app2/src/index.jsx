@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import appStyles from "./App.css?inline"; // Import CSS as a string using Vite's ?inline query
 // Import i18n instance directly
-import i18n, { SUPPORTED_LANGUAGES } from "./i18n";
+import { locales, setLocale } from "./paraglide/runtime";
 // Explicitly import jsx-runtime to ensure it's bundled
 import "react/jsx-runtime";
 
@@ -26,8 +26,8 @@ class App2Element extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (name === "lang" && oldValue !== newValue && newValue) {
       // Always prioritize the lang attribute from the shell
-      if (SUPPORTED_LANGUAGES.includes(newValue)) {
-        i18n.changeLanguage(newValue);
+      if (locales.includes(newValue)) {
+        setLocale(newValue);
       }
     }
   }
@@ -56,10 +56,19 @@ class App2Element extends HTMLElement {
     const root = ReactDOM.createRoot(container);
     root.render(<App />);
 
-    // Always set language from attribute if provided
+    // Set initial language
     const lang = this.getAttribute("lang");
-    if (lang && SUPPORTED_LANGUAGES.includes(lang)) {
-      i18n.changeLanguage(lang);
+    if (lang && locales.includes(lang)) {
+      setLocale(lang);
+    }
+  }
+
+  disconnectedCallback() {
+    // Clean up React root when component is removed
+    const container = this.shadowRoot?.getElementById("app2-root");
+    if (container) {
+      const root = ReactDOM.createRoot(container);
+      root.unmount();
     }
   }
 }

@@ -1,10 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
-
+import { paraglideVitePlugin } from "@inlang/paraglide-js";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
+    paraglideVitePlugin({
+      project: "./project.inlang",
+      outdir: "./src/paraglide",
+      localStorageKey: "i18nextLng",
+    }),
     react(),
     process.env.ANALYZE === "true" &&
       visualizer({
