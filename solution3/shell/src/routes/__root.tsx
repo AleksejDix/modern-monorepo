@@ -15,7 +15,7 @@ function Layout() {
   const currentLang = i18n.language || DEFAULT_LANGUAGE;
 
   return (
-    <div className="app">
+    <div className="container mx-auto">
       <header className="app-header">
         <div className="header-top">
           <h1>Micro Frontend Shell</h1>
