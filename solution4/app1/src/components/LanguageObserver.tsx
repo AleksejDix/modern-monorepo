@@ -5,13 +5,13 @@ interface UrlChangeEvent extends Event {
   detail: { lang: string };
 }
 
-export const LanguageObserver = () => {
+export function useLanguageObserver () {
   useEffect(() => {
     const handleUrlChange = (event: Event) => {
 
       if ('detail' in event) {
         const { lang = 'de' } = (event as UrlChangeEvent).detail;
-          i18nApp1.changeLanguage(lang);
+        i18nApp1.changeLanguage(lang);
       }
     };
     
@@ -20,6 +20,4 @@ export const LanguageObserver = () => {
       document.removeEventListener('nuqs:changeLanguage', handleUrlChange as EventListener);
     };
   }, []);
-
-  return null;
 };
